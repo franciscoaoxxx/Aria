@@ -1,0 +1,73 @@
+name: rotate
+
+# Detecta rotaciones del reproductor de YouTube y añade la entrada a
+# player_configs.json. Las apps de Onda instaladas lo bajan solas (TTL 6 h, o al
+# instante si topan con un player desconocido).
+
+on:
+  schedule:
+    - cron: "17 */4 * * *"   # cada 4 h
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rotate
+  cancel-in-progress: false
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # `npm ci` si subiste package-lock.json (recomendado); si no, `npm install`.
+      - run: npm ci || npm install
+
+      - name: Derivar la entrada del player actual
+        id: derive
+        run: |
+          set +e
+          node derive.mjs --json entry.json > derive.out
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat derive.out
+          hash=$(node -e "process.stdout.write(JSON.parse(require('fs').readFileSync('derive.out','utf8')).hash||'')")
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
+
+      - name: Nada que hacer
+        if: steps.derive.outputs.code != '0'
+        run: echo "El player actual ya está en la tabla (o no se pudo derivar). Fin."
+
+      - name: Validar
+        if: steps.derive.outputs.code == '0'
+        run: node validate.mjs
+        # VALIDATION_VIDEO_ID: opcional, un vídeo con signatureCipher garantizado
+        env:
+          VALIDATION_VIDEO_ID: ${{ vars.VALIDATION_VIDEO_ID }}
+
+      - name: Insertar la entrada y hacer commit
+        if: steps.derive.outputs.code == '0'
+        run: |
+          node - <<'JS'
+          import { readFileSync, writeFileSync } from "node:fs";
+          const cfg = JSON.parse(readFileSync("player_configs.json", "utf8"));
+          const entry = JSON.parse(readFileSync("entry.json", "utf8"));
+          for (const [h, e] of Object.entries(entry)) {
+            if (cfg.players[h]) { console.log(`${h} ya estaba`); process.exit(0); }
+            cfg.players[h] = e;
+          }
+          writeFileSync("player_configs.json", JSON.stringify(cfg, null, 2) + "\n");
+          JS
+          if git diff --quiet player_configs.json; then
+            echo "sin cambios"; exit 0
+          fi
+          git config user.name  "onda-rotate"
+          git config user.email "onda-rotate@users.noreply.github.com"
+          git add player_configs.json
+          git commit -m "player ${{ steps.derive.outputs.hash }}: entrada nueva (auto)"
+          git push

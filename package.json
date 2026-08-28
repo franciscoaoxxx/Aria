@@ -1,0 +1,14 @@
+{
+  "name": "onda-player-configs",
+  "private": true,
+  "type": "module",
+  "description": "Tabla de recetas de descifrado del reproductor de YouTube para Onda",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "derive": "node derive.mjs",
+    "validate": "node validate.mjs"
+  },
+  "dependencies": {
+    "jsdom": "^24.1.0"
+  }
+}
