@@ -53,7 +53,7 @@ jobs:
       - name: Insertar la entrada y hacer commit
         if: steps.derive.outputs.code == '0'
         run: |
-          node - <<'JS'
+          node --input-type=module - <<'JS'
           import { readFileSync, writeFileSync } from "node:fs";
           const cfg = JSON.parse(readFileSync("player_configs.json", "utf8"));
           const entry = JSON.parse(readFileSync("entry.json", "utf8"));
