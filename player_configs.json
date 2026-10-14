@@ -2,6 +2,14 @@
   "_comment": "Recetas de descifrado por versión del reproductor web de YouTube. La llave es el hash de 8 hex de la URL del player_ias; 'alias' es el md5 (primeros 10000 bytes de base.js) de respaldo. 'sig' es la expresión JS de descifrado de firma (INPUT = la firma cruda). 'nClass' es la clase-URL del reproductor con la que se hace el n-transform. 'sts' es el signatureTimestamp. YouTube rota el player cada pocos días: cuando aparece un hash que no está aquí, hay que añadir una entrada (ver docs/youtube-integration-progreso.md, Parte 6).",
   "schemaVersion": 1,
   "players": {
+    "21090930": {
+      "sig": "RG(5,5449,INPUT)",
+      "nClass": "xa",
+      "sts": 20738,
+      "aliases": [
+        "d1e6e263"
+      ]
+    },
     "60869856": {
       "sig": "xD(28,4062,INPUT)",
       "nClass": "n7",
