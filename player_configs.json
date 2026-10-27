@@ -585,6 +585,14 @@
       "aliases": [
         "4591528e"
       ]
+    },
+    "dce23b30": {
+      "sig": "bi(17,1452,INPUT)",
+      "nClass": "aL",
+      "sts": 20746,
+      "aliases": [
+        "2a1231bc"
+      ]
     }
   }
 }
