@@ -633,6 +633,14 @@
       "aliases": [
         "ac841426"
       ]
+    },
+    "a5c2aafe": {
+      "sig": "gm(18,2147,INPUT)",
+      "nClass": "ch",
+      "sts": 20760,
+      "aliases": [
+        "05ac6f6c"
+      ]
     }
   }
 }
