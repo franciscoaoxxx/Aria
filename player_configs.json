@@ -649,6 +649,14 @@
       "aliases": [
         "bbdc8962"
       ]
+    },
+    "3c73c103": {
+      "sig": "Iq(18,5414,INPUT)",
+      "nClass": "NK",
+      "sts": 20769,
+      "aliases": [
+        "e414d36f"
+      ]
     }
   }
 }
