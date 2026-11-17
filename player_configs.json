@@ -681,6 +681,14 @@
       "aliases": [
         "dc604f01"
       ]
+    },
+    "b559f50c": {
+      "sig": "Go(5,5087,INPUT)",
+      "nClass": "Rs",
+      "sts": 20770,
+      "aliases": [
+        "cd1bd289"
+      ]
     }
   }
 }
